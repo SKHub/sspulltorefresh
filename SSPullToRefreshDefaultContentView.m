@@ -28,7 +28,7 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 		_statusLabel.textAlignment = UITextAlignmentCenter;
 #else
-        _statusLabel.textAlignment = NSTextAlignmentCenter
+        _statusLabel.textAlignment = NSTextAlignmentCenter;
 #endif
 		[self addSubview:_statusLabel];
 		
@@ -40,7 +40,7 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 		_lastUpdatedAtLabel.textAlignment = UITextAlignmentCenter;
 #else
-        _lastUpdatedAtLabel.textAlignment = NSTextAlignmentCenter
+        _lastUpdatedAtLabel.textAlignment = NSTextAlignmentCenter;
 #endif
 		[self addSubview:_lastUpdatedAtLabel];
 		

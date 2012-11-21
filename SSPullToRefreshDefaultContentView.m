@@ -25,7 +25,11 @@
 		_statusLabel.font = [UIFont boldSystemFontOfSize:14.0f];
 		_statusLabel.textColor = [UIColor blackColor];
 		_statusLabel.backgroundColor = [UIColor clearColor];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 		_statusLabel.textAlignment = UITextAlignmentCenter;
+#else
+        _statusLabel.textAlignment = NSTextAlignmentCenter
+#endif
 		[self addSubview:_statusLabel];
 		
 		_lastUpdatedAtLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 34.0f, width, 20.0f)];
@@ -33,7 +37,11 @@
 		_lastUpdatedAtLabel.font = [UIFont systemFontOfSize:12.0f];
 		_lastUpdatedAtLabel.textColor = [UIColor lightGrayColor];
 		_lastUpdatedAtLabel.backgroundColor = [UIColor clearColor];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 		_lastUpdatedAtLabel.textAlignment = UITextAlignmentCenter;
+#else
+        _lastUpdatedAtLabel.textAlignment = NSTextAlignmentCenter
+#endif
 		[self addSubview:_lastUpdatedAtLabel];
 		
         _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];

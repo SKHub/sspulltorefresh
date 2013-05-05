@@ -30,6 +30,7 @@
 #else
         _statusLabel.textAlignment = NSTextAlignmentCenter;
 #endif
+		_statusLabel.textAlignment = NSTextAlignmentCenter;
 		[self addSubview:_statusLabel];
 		
 		_lastUpdatedAtLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 34.0f, width, 20.0f)];
@@ -83,10 +84,12 @@
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		dateFormatter = [[NSDateFormatter alloc] init];
-		dateFormatter.dateStyle = NSDateFormatterLongStyle;
-		
+        dateFormatter.formatterBehavior = NSDateFormatterBehavior10_4;
+        dateFormatter.dateStyle = NSDateFormatterLongStyle;
+        dateFormatter.timeStyle = NSDateFormatterShortStyle;
 	});
-	_lastUpdatedAtLabel.text = [NSString stringWithFormat:@"Last Updated: %@", [dateFormatter stringFromDate:date]];
+
+	_lastUpdatedAtLabel.text = [NSString stringWithFormat:@"Last Updated: %@", [dateFormatter stringForObjectValue:date]];
 }
 
 @end

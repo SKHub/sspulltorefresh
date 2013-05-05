@@ -35,18 +35,18 @@
 #pragma mark - Accessors
 
 - (void)setState:(SSPullToRefreshViewState)state {
-	BOOL loading = _state == SSPullToRefreshViewStateLoading;
+	BOOL wasLoading = _state == SSPullToRefreshViewStateLoading;
     _state = state;
 	
 	// Forward to content view
 	[self.contentView setState:_state withPullToRefreshView:self];
 	
 	// Update delegate
-	if (loading && _state != SSPullToRefreshViewStateLoading) {
+	if (wasLoading && _state != SSPullToRefreshViewStateLoading) {
 		if ([_delegate respondsToSelector:@selector(pullToRefreshViewDidFinishLoading:)]) {
 			[_delegate pullToRefreshViewDidFinishLoading:self];
 		}
-	} else if (!loading && _state == SSPullToRefreshViewStateLoading) {
+	} else if (!wasLoading && _state == SSPullToRefreshViewStateLoading) {
 		[self _setPullProgress:1.0f];
 		if ([_delegate respondsToSelector:@selector(pullToRefreshViewDidStartLoading:)]) {
 			[_delegate pullToRefreshViewDidStartLoading:self];
@@ -106,7 +106,7 @@
 - (void)dealloc {
 	self.scrollView = nil;
 	self.delegate = nil;
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
+#if !OS_OBJECT_USE_OBJC
 	dispatch_release(_animationSemaphore);
 #endif
 }
@@ -148,6 +148,12 @@
 		self.state = SSPullToRefreshViewStateNormal;
 		self.expandedHeight = 70.0f;
 
+		for (UIView *view in self.scrollView.subviews) {
+			if ([view isKindOfClass:[SSPullToRefreshView class]]) {
+				[[NSException exceptionWithName:@"SSPullToRefreshViewAlreadyAdded" reason:@"There is already a SSPullToRefreshView added to this scroll view. Unexpected things will happen. Don't do this." userInfo:nil] raise];
+			}
+		}
+
 		// Add to scroll view
 		[self.scrollView addSubview:self];
 
@@ -162,18 +168,23 @@
 #pragma mark - Loading
 
 - (void)startLoading {
-	[self startLoadingAndExpand:NO];
+	[self startLoadingAndExpand:NO animated:NO];
 }
 
 
 - (void)startLoadingAndExpand:(BOOL)shouldExpand {
+	[self startLoadingAndExpand:shouldExpand animated:YES];
+}
+
+
+- (void)startLoadingAndExpand:(BOOL)shouldExpand animated:(BOOL)animated {
 	// If we're not loading, this method has no effect
     if (_state == SSPullToRefreshViewStateLoading) {
 		return;
 	}
-	
+
 	// Animate back to the loading state
-	[self _setState:SSPullToRefreshViewStateLoading animated:YES expanded:shouldExpand completion:nil];
+	[self _setState:SSPullToRefreshViewStateLoading animated:animated expanded:shouldExpand completion:nil];
 }
 
 
@@ -184,9 +195,11 @@
 	}
 	
 	// Animate back to the normal state
+	__weak SSPullToRefreshView *blockSelf = self;
 	[self _setState:SSPullToRefreshViewStateClosing animated:YES expanded:NO completion:^{
-		self.state = SSPullToRefreshViewStateNormal;
+		blockSelf.state = SSPullToRefreshViewStateNormal;
 	}];
+	[self refreshLastUpdatedAt];
 }
 
 
@@ -223,6 +236,16 @@
 	
 	// Update the content inset
 	_scrollView.contentInset = inset;
+
+	// If scrollView is on top, scroll again to the top (needed for scrollViews with content > scrollView).
+	if (_scrollView.contentOffset.y == 0) {
+		[_scrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+	}
+
+	// Tell the delegate
+	if ([self.delegate respondsToSelector:@selector(pullToRefreshView:didUpdateContentInset:)]) {
+		[self.delegate pullToRefreshView:self didUpdateContentInset:_scrollView.contentInset];
+	}
 }
 
 
@@ -297,11 +320,7 @@
 			}
 		// Scroll view is loading
 		} else if (_state == SSPullToRefreshViewStateLoading) {
-			if (y >= 0.0f) {
-				[self _setContentInsetTop:0.0f];
-			} else {
-				[self _setContentInsetTop:fminf(-y, _expandedHeight)];
-			}
+			[self _setContentInsetTop:_expandedHeight];
 		}
 		return;
 	}

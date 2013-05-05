@@ -30,8 +30,6 @@
 // }
 //
 
-#import <UIKit/UIKit.h>
-
 typedef enum {
 	/// Most will say "Pull to refresh" in this state
 	SSPullToRefreshViewStateNormal,
@@ -129,6 +127,10 @@ typedef enum {
  animate down the pull to refresh view to show that it's loading.
  */
 - (void)startLoadingAndExpand:(BOOL)shouldExpand;
+/**
+ Call this method if you wish to control animating the expansion.
+ */
+- (void)startLoadingAndExpand:(BOOL)shouldExpand animated:(BOOL)animated;
 
 /**
  Call this when you finish loading.
@@ -167,6 +169,11 @@ typedef enum {
  Some content views may display this date.
  */
 - (NSDate *)pullToRefreshViewLastUpdatedAt:(SSPullToRefreshView *)view;
+
+/**
+ The pull to refresh view updated its scroll view's content inset
+ */
+- (void)pullToRefreshView:(SSPullToRefreshView *)view didUpdateContentInset:(UIEdgeInsets)contentInset;
 
 @end
 

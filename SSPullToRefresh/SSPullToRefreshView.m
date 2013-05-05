@@ -328,7 +328,7 @@
         
         if (y < 0) {
             if ([self.contentView respondsToSelector:@selector(expanded:)])
-                [self.contentView expanded:y];
+                [self.contentView expanded:fabsf(y)];
         }
         
 		return;

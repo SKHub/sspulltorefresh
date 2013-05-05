@@ -1,3 +1,29 @@
+# Fork Features
+`expanded:` method added to `SSPullToRefreshContentView`
+``` objective-c
+/**
+ - FORK FEATURE
+ Will be called whenever the pull to refresh view is being expanded. 
+ This call was build mainly to allow for contentView updates when being expanded
+ DO NOT Confuse with setPullProgress: as this method passes in the exact height of expansion
+ */
+- (void)expanded:(CGFloat)height;
+```
+
+`loadingStateHeight:` property added to `SSPullToRefreshView`
+``` objective-c
+/**
+ - FORK FEATURE
+ The height of the loading expanded content view. The default is `70.0`.
+ 
+ This is different than `expandedHeight` in that this is the height of the contentView
+ when in the `loading` state after the contentView has already expanded 
+ 
+ @see expandedHeight
+ */
+@property (nonatomic, assign) CGFloat loadingStateHeight;
+```
+
 # SSPullToRefresh
 
 There are dozens of pull to refresh views. I've never found one I'm happy with. I always end up customizing one, so I decided to write one that's highly customizable. You can just write you view and forget about the actual pull to refresh details.

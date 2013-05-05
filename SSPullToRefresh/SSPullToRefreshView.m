@@ -26,6 +26,7 @@
 @synthesize delegate = _delegate;
 @synthesize scrollView = _scrollView;
 @synthesize expandedHeight = _expandedHeight;
+@synthesize loadingStateHeight = _loadingStateHeight;
 @synthesize contentView = _contentView;
 @synthesize state = _state;
 @synthesize expanded = _expanded;
@@ -57,7 +58,7 @@
 
 - (void)setExpanded:(BOOL)expanded {
 	_expanded = expanded;
-	[self _setContentInsetTop:expanded ? self.expandedHeight : 0.0f];
+	[self _setContentInsetTop:expanded ? self.loadingStateHeight : 0.0f];
 }
 
 
@@ -147,6 +148,7 @@
 		self.delegate = delegate;
 		self.state = SSPullToRefreshViewStateNormal;
 		self.expandedHeight = 70.0f;
+        self.loadingStateHeight = self.expandedHeight;
 
 		for (UIView *view in self.scrollView.subviews) {
 			if ([view isKindOfClass:[SSPullToRefreshView class]]) {
@@ -321,7 +323,7 @@
 			}
 		// Scroll view is loading
 		} else if (_state == SSPullToRefreshViewStateLoading) {
-			[self _setContentInsetTop:_expandedHeight];
+			[self _setContentInsetTop:_loadingStateHeight];
 		}
         
         if (y < 0) {

@@ -73,6 +73,18 @@ typedef enum {
  */
 @property (nonatomic, assign) CGFloat expandedHeight;
 
+
+/**
+ - FORK FEATURE
+ The height of the loading expanded content view. The default is `70.0`.
+ 
+ This is different than `expandedHeight` in that this is the height of the contentView
+ when in the `loading` state after the contentView has already expanded 
+ 
+ @see expandedHeight
+ */
+@property (nonatomic, assign) CGFloat loadingStateHeight;
+
 /**
  A boolean indicating if the pull to refresh view is expanded.
  
@@ -203,9 +215,10 @@ typedef enum {
 - (void)setLastUpdatedAt:(NSDate *)date withPullToRefreshView:(SSPullToRefreshView *)view;
 
 /**
+ - FORK FEATURE
  Will be called whenever the pull to refresh view is being expanded. 
- This call was build mainly to allow for contentView updates when expanded
- DO NOT Confuse with setPullProgress:
+ This call was build mainly to allow for contentView updates when being expanded
+ DO NOT Confuse with setPullProgress: as this method passes in the exact height of expansion
  */
 - (void)expanded:(CGFloat)height;
 

@@ -202,4 +202,11 @@ typedef enum {
  */
 - (void)setLastUpdatedAt:(NSDate *)date withPullToRefreshView:(SSPullToRefreshView *)view;
 
+/**
+ Will be called whenever the pull to refresh view is being expanded. 
+ This call was build mainly to allow for contentView updates when expanded
+ DO NOT Confuse with setPullProgress:
+ */
+- (void)expanded:(CGFloat)height;
+
 @end

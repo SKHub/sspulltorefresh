@@ -309,6 +309,7 @@
 			if (y > -_expandedHeight && y < 0.0f) {
 				self.state = SSPullToRefreshViewStateNormal;
 			}
+            
 		// Scroll view is normal
 		} else if (_state == SSPullToRefreshViewStateNormal) {
 			// Update the content view's pulling progressing
@@ -322,6 +323,12 @@
 		} else if (_state == SSPullToRefreshViewStateLoading) {
 			[self _setContentInsetTop:_expandedHeight];
 		}
+        
+        if (y < 0) {
+            if ([self.contentView respondsToSelector:@selector(expanded:)])
+                [self.contentView expanded:y];
+        }
+        
 		return;
 	}
 	

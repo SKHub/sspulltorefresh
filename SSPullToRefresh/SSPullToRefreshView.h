@@ -126,6 +126,16 @@ typedef enum {
  */
 - (id)initWithScrollView:(UIScrollView *)scrollView delegate:(id<SSPullToRefreshViewDelegate>)delegate;
 
+
+/**
+ - FORK FEATURE
+ Same as original init method but lets you adjust expandedHeight and loadingStateHeight all in one call
+ */
+- (id)initWithScrollView:(UIScrollView *)scrollView
+                delegate:(id<SSPullToRefreshViewDelegate>)delegate
+          expandedHeight:(CGFloat)expandedHeight
+      loadingStateHeight:(CGFloat)loadingStateHeight;
+
 /**
  Call this method when you start loading. If you trigger loading another way besides pulling to refresh, call this
  method so the pull to refresh view will be in sync with the loading status. By default, it will not expand the view

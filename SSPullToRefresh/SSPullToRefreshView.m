@@ -140,25 +140,29 @@
 #pragma mark - Initializer
 
 - (id)initWithScrollView:(UIScrollView *)scrollView delegate:(id<SSPullToRefreshViewDelegate>)delegate {
-	CGRect frame = CGRectMake(0.0f, 0.0f - scrollView.bounds.size.height, scrollView.bounds.size.width,
+    return [self initWithScrollView:scrollView delegate:delegate expandedHeight:70.0f loadingStateHeight:70.0f];
+}
+
+- (id)initWithScrollView:(UIScrollView *)scrollView delegate:(id<SSPullToRefreshViewDelegate>)delegate expandedHeight:(CGFloat)expandedHeight loadingStateHeight:(CGFloat)loadingStateHeight {
+    CGRect frame = CGRectMake(0.0f, 0.0f - scrollView.bounds.size.height, scrollView.bounds.size.width,
 							  scrollView.bounds.size.height);
 	if ((self = [self initWithFrame:frame])) {
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.scrollView = scrollView;
 		self.delegate = delegate;
 		self.state = SSPullToRefreshViewStateNormal;
-		self.expandedHeight = 70.0f;
-        self.loadingStateHeight = self.expandedHeight;
-
+		self.expandedHeight = expandedHeight;
+        self.loadingStateHeight = loadingStateHeight;
+        
 		for (UIView *view in self.scrollView.subviews) {
 			if ([view isKindOfClass:[SSPullToRefreshView class]]) {
 				[[NSException exceptionWithName:@"SSPullToRefreshViewAlreadyAdded" reason:@"There is already a SSPullToRefreshView added to this scroll view. Unexpected things will happen. Don't do this." userInfo:nil] raise];
 			}
 		}
-
+        
 		// Add to scroll view
 		[self.scrollView addSubview:self];
-
+        
 		// Semaphore is used to ensure only one animation plays at a time
 		_animationSemaphore = dispatch_semaphore_create(0);
 		dispatch_semaphore_signal(_animationSemaphore);

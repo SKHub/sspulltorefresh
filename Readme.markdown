@@ -24,6 +24,18 @@
 @property (nonatomic, assign) CGFloat loadingStateHeight;
 ```
 
+Also added new `init` method for editing attributes all in one method.  You may still use the original `init` method.
+``` objective-c
+/**
+ - FORK FEATURE
+ Same as original init method but lets you adjust expandedHeight and loadingStateHeight all in one call
+ */
+- (id)initWithScrollView:(UIScrollView *)scrollView
+                delegate:(id<SSPullToRefreshViewDelegate>)delegate
+          expandedHeight:(CGFloat)expandedHeight
+      loadingStateHeight:(CGFloat)loadingStateHeight;
+```
+
 # SSPullToRefresh
 
 There are dozens of pull to refresh views. I've never found one I'm happy with. I always end up customizing one, so I decided to write one that's highly customizable. You can just write you view and forget about the actual pull to refresh details.

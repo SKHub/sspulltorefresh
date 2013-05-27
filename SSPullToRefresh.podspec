@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name      = 'SSPullToRefresh'
+  s.name      = 'SSPullToRefresh-Extensions'
   s.version   = '1.1.2'
   s.summary   = 'Simple and highly customizable pull to refresh view.'
   s.homepage  = 'https://github.com/samsoffes/sspulltorefresh'
